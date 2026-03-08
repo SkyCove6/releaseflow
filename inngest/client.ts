@@ -24,5 +24,6 @@ export function normalizeEventData<T>(name: string, data: T): T {
 export const inngest = new Inngest({
   id: "releaseflow",
   name: "ReleaseFlow",
+  eventKey: process.env.INNGEST_EVENT_KEY,
   schemas: new EventSchemas().fromUnion<ReleaseFlowEvent>(),
 });
