@@ -119,9 +119,11 @@ export const campaignRouter = createTRPCRouter({
         .single();
       if (error || !campaign) throw new TRPCError({ code: "NOT_FOUND", message: "Campaign not found" });
 
-      const release = Array.isArray(campaign.releases) ? campaign.releases[0] : campaign.releases;
-      const artist = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
-      if (!artist || artist.user_id !== ctx.user.id) {
+      const _rel1 = Array.isArray(campaign.releases) ? campaign.releases[0] : campaign.releases;
+      const release = Array.isArray(_rel1) ? _rel1[0] : _rel1;
+      const _art1 = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const artist = Array.isArray(_art1) ? _art1[0] : _art1;
+      if (!artist || (artist as { user_id: string }).user_id !== ctx.user.id) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Not your campaign" });
       }
 
@@ -162,9 +164,11 @@ export const campaignRouter = createTRPCRouter({
         .single();
       if (error || !campaign) throw new TRPCError({ code: "NOT_FOUND", message: "Campaign not found" });
 
-      const release = Array.isArray(campaign.releases) ? campaign.releases[0] : campaign.releases;
-      const artist = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
-      if (!artist || artist.user_id !== ctx.user.id) {
+      const _rel2 = Array.isArray(campaign.releases) ? campaign.releases[0] : campaign.releases;
+      const release = Array.isArray(_rel2) ? _rel2[0] : _rel2;
+      const _art2 = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const artist = Array.isArray(_art2) ? _art2[0] : _art2;
+      if (!artist || (artist as { user_id: string }).user_id !== ctx.user.id) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Not your campaign" });
       }
 
@@ -195,8 +199,10 @@ export const campaignRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Campaign not found" });
       }
 
-      const release = Array.isArray(campaign.releases) ? campaign.releases[0] : campaign.releases;
-      const artist = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const _rel3 = Array.isArray(campaign.releases) ? campaign.releases[0] : campaign.releases;
+      const release = Array.isArray(_rel3) ? _rel3[0] : _rel3;
+      const _art3 = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const artist = (Array.isArray(_art3) ? _art3[0] : _art3) as { id: string; name: string; genre: string; user_id: string } | undefined;
       if (!release || !artist || artist.user_id !== ctx.user.id) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Not your campaign" });
       }

@@ -80,9 +80,12 @@ export const contentRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Content item not found" });
       }
 
-      const campaign = Array.isArray(row.campaigns) ? row.campaigns[0] : row.campaigns;
-      const release = campaign && Array.isArray(campaign.releases) ? campaign.releases[0] : campaign?.releases;
-      const artist = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const _c = Array.isArray(row.campaigns) ? row.campaigns[0] : row.campaigns;
+      const campaign = Array.isArray(_c) ? _c[0] : _c;
+      const _r = campaign && Array.isArray(campaign.releases) ? campaign.releases[0] : campaign?.releases;
+      const release = Array.isArray(_r) ? _r[0] : _r;
+      const _a = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const artist = (Array.isArray(_a) ? _a[0] : _a) as { id: string; user_id: string } | undefined;
       if (!artist || artist.user_id !== ctx.user.id) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Not your content item" });
       }
@@ -129,9 +132,12 @@ export const contentRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Content item not found" });
       }
 
-      const campaign = Array.isArray(row.campaigns) ? row.campaigns[0] : row.campaigns;
-      const release = campaign && Array.isArray(campaign.releases) ? campaign.releases[0] : campaign?.releases;
-      const artist = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const _c = Array.isArray(row.campaigns) ? row.campaigns[0] : row.campaigns;
+      const campaign = Array.isArray(_c) ? _c[0] : _c;
+      const _r = campaign && Array.isArray(campaign.releases) ? campaign.releases[0] : campaign?.releases;
+      const release = Array.isArray(_r) ? _r[0] : _r;
+      const _a = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const artist = (Array.isArray(_a) ? _a[0] : _a) as { id: string; user_id: string } | undefined;
       if (!campaign || !release || !artist || artist.user_id !== ctx.user.id) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Not your content item" });
       }
@@ -190,9 +196,12 @@ export const contentRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Content item not found" });
       }
 
-      const campaign = Array.isArray(row.campaigns) ? row.campaigns[0] : row.campaigns;
-      const release = campaign && Array.isArray(campaign.releases) ? campaign.releases[0] : campaign?.releases;
-      const artist = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const _c = Array.isArray(row.campaigns) ? row.campaigns[0] : row.campaigns;
+      const campaign = Array.isArray(_c) ? _c[0] : _c;
+      const _r = campaign && Array.isArray(campaign.releases) ? campaign.releases[0] : campaign?.releases;
+      const release = Array.isArray(_r) ? _r[0] : _r;
+      const _a = release && Array.isArray(release.artists) ? release.artists[0] : release?.artists;
+      const artist = (Array.isArray(_a) ? _a[0] : _a) as { id: string; user_id: string } | undefined;
       if (!artist || artist.user_id !== ctx.user.id) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Not your content item" });
       }
@@ -227,9 +236,9 @@ export const contentRouter = createTRPCRouter({
           traceId: buildTraceId("content-reject"),
           requestId: buildIdempotencyKey("request", "content", "reject", input.contentId),
           contentId: input.contentId,
-          campaignId: campaign.id,
-          releaseId: campaign.release_id,
-          artistId: release.artist_id,
+          campaignId: campaign!.id,
+          releaseId: campaign!.release_id,
+          artistId: (release as { artist_id: string } | undefined)?.artist_id ?? "",
           platform: row.platform,
           contentType: row.content_type,
           reason: input.reason ?? "",

@@ -37,8 +37,8 @@ describe("agent reliability and trigger endpoint", () => {
     sendMock.mockReset();
     getUserMock.mockReset();
     insertMock.mockReset();
-    process.env.NODE_ENV = "development";
     process.env.ADMIN_USER_IDS = "admin-1";
+    process.env.ENABLE_ADMIN_EVENT_TRIGGER = "true";
   });
 
   it("retries agent execution and logs completed run", async () => {

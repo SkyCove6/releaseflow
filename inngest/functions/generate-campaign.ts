@@ -138,7 +138,6 @@ export const generateCampaign = inngest.createFunction(
 
           return {
             value: { strategy, timeline, kpi_targets },
-            output: { strategy, timeline, kpi_targets },
             tokensUsed: 0,
             costCents: 0,
           };

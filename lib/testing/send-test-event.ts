@@ -66,17 +66,19 @@ export async function sendTestEvent(
     return result as SendTestEventResult;
   } catch (error) {
     const payload = data as Record<string, unknown>;
-    await supabaseAdmin.from("event_logs").insert({
-      event_name: normalized,
-      payload,
-      status: "failed",
-      event_id: null,
-      trace_id: typeof payload.traceId === "string" ? payload.traceId : null,
-      idempotency_key:
-        typeof payload.idempotencyKey === "string" ? payload.idempotencyKey : null,
-      user_id: typeof payload.userId === "string" ? payload.userId : null,
-      error: error instanceof Error ? error.message : String(error),
-    }).catch(() => undefined);
+    try {
+      await supabaseAdmin.from("event_logs").insert({
+        event_name: normalized,
+        payload,
+        status: "failed",
+        event_id: null,
+        trace_id: typeof payload.traceId === "string" ? payload.traceId : null,
+        idempotency_key:
+          typeof payload.idempotencyKey === "string" ? payload.idempotencyKey : null,
+        user_id: typeof payload.userId === "string" ? payload.userId : null,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    } catch { /* best-effort audit log — never throw from error handler */ }
     throw error;
   }
 }

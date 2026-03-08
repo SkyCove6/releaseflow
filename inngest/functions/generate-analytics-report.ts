@@ -149,7 +149,7 @@ export const generateAnalyticsReport = inngest.createFunction(
             },
             output: {
               highlights: result.report.highlights,
-              recommendations: result.report.recommendations.length,
+              recommendations: result.report.recommendedActions.length,
             },
             tokensUsed: result.tokensUsed,
             costCents: result.costCents,

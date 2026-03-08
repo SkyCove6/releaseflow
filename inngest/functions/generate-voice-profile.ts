@@ -86,7 +86,7 @@ export const generateVoiceProfile = inngest.createFunction(
             value: result,
             output: {
               confidenceScore: result.profile.confidenceScore,
-              pillars: result.profile.brandPillars.length,
+              pillars: result.profile.tonalQualities.length,
             },
             tokensUsed: result.tokensUsed,
             costCents: result.costCents,

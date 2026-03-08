@@ -91,21 +91,25 @@ export async function emitLifecycleEvent<T extends LifecycleEventName>(
         ? ((error as { ids: string[] }).ids[0] ?? undefined)
         : undefined;
 
-    await writeEventLog({
-      name,
-      data: eventData,
-      traceId,
-      eventId,
-      status: "failed",
-      error: message,
-    }).catch(() => undefined);
+    try {
+      await writeEventLog({
+        name,
+        data: eventData,
+        traceId,
+        eventId,
+        status: "failed",
+        error: message,
+      });
+    } catch { /* best-effort event log */ }
 
-    await supabaseAdmin.from("agent_alerts").insert({
-      agent_name: `lifecycle-event:${name}`,
-      failure_count: 1,
-      last_error: `Event ${name} failed: ${message}`,
-      notified_at: new Date().toISOString(),
-    }).catch(() => undefined);
+    try {
+      await supabaseAdmin.from("agent_alerts").insert({
+        agent_name: `lifecycle-event:${name}`,
+        failure_count: 1,
+        last_error: `Event ${name} failed: ${message}`,
+        notified_at: new Date().toISOString(),
+      });
+    } catch { /* best-effort alert */ }
 
     console.warn("[event] failed", {
       name,

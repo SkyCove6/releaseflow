@@ -48,7 +48,7 @@ export default function DashboardReleaseWizardPage() {
     { releaseId: createdReleaseId ?? "" },
     {
       enabled: Boolean(createdReleaseId),
-      refetchInterval: (data) => (data?.campaign ? false : 2500),
+      refetchInterval: (query) => (query.state.data?.campaign ? false : 2500),
     }
   );
 
